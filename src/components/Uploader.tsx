@@ -3,67 +3,45 @@ import { useState, useEffect, useRef } from "react"
 import styled from "styled-components"
 
 interface UploaderProps {
-  setAudio: (audio: { audioFile: File | Blob | null, downloadUri: string | null }) => void;
+  setAudio: (audio: { audioFile: File | Blob | null, s3FileKey: string | null }) => void;
 }
 
 //audio file uploads
 const Uploader: React.FC<UploaderProps> = ({ setAudio }) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [audioFile, setAudioFile] = useState<File | Blob | null>(null) //just Blob?
-  const [downloadUri, setDownloadUri] = useState<string | null>(null)
+  const [s3FileKey, setS3FileKey] = useState<string | null>(null)
   const [isUploading, setIsUploading] = useState<boolean>(false)
   const [uploadProgress, setUploadProgress] = useState<number>(0)
 
   // elevate.ai api
   useEffect(() => {
-    async function getTranscript() {
-      if (downloadUri) {
-        const res1 = await fetch('/api/declare_audio', {
-          method: 'POST',
-          body: JSON.stringify({ downloadUri }),
-        })
-        const { interactionIdentifier } = await res1?.json()
-        console.log(interactionIdentifier)
+    async function uploadAudio() {
+      const formdata = new FormData()
+      formdata.append('audioFile', audioFile)
 
-        //todo
-        // const res2 = await fetch('/api/transcribe', {
-        //   method: 'POST',
-        //   body: JSON.stringify({ interactionIdentifier })
-        // })
-
-        //! cors error maybe need to do this on server
-        const res2 = await fetch(`https://api.elevateai.com/v1/interactions/${interactionIdentifier}/transcript`, {
-          method: 'GET',
-          headers: { 'X-API-Token': process.env.ELEVATE_AI_API_KEY }
-        })
-        const data = await res2.json()
-        console.log('data',data)
-      } 
-      
-      //todo
-      // if (audioFile) {
-        // const formdata = new FormData()
-        // formdata.append('file.mp3', audioFile)
-      //   console.log('no audioFile has been uploaded yet')
-      // }
+      const response = await fetch('/api/upload_audio_s3', {
+        method: 'POST',
+        body: formdata
+      })
+      const data = await response.json()
+      console.log(data)
+      const { s3FileKey } = data;
+      setS3FileKey(s3FileKey)
     }
-
-    // console.log('audioFile',audioFile)
-    // getTranscript()
-  }, [downloadUri, audioFile])
+    if (audioFile) {
+      uploadAudio()
+    }
+  }, [audioFile])
 
   // pass audio states to parent
   useEffect(() => {
-    setAudio({ audioFile, downloadUri })
-  }, [downloadUri, audioFile])
+    setAudio({ audioFile, s3FileKey })
+  }, [s3FileKey, audioFile])
 
   const handleFileChange = (files: FileList | null) => {
     if (files && files[0]) {
       setAudioFile(files[0]);
-
-      // Generate download URI for the selected file
-      const uri = URL.createObjectURL(files[0]);
-      setDownloadUri(uri);
     }
   };
 

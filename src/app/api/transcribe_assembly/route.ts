@@ -16,7 +16,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       }
 
       const transcript = await client.transcripts.transcribe(params)
-      console.log(transcript.text)
       return NextResponse.json(transcript, { status: 200 })
     } else {
       return NextResponse.json({ message: 'no download uri was found' }, { status: 400 })
