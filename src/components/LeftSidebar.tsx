@@ -9,6 +9,15 @@ export default function LeftSidebar({ transcripts }) {
   const [activeTab, setActiveTab] = useState(null)
   // const router = useRouter();
 
+  async function getTranscript(id) {
+    console.log('getTranscript')
+    const response = await fetch(`/api/get_transcripts/${id}`)
+    const data = await response.json()
+    console.log(data)
+
+    //todo - pass transcript back up to parent 
+  }
+
   return (
     <SidebarWrapper id='leftsidebar'>
       <div id='top'>
@@ -18,7 +27,7 @@ export default function LeftSidebar({ transcripts }) {
       <List>
         {transcripts.map((transcript: object) => {
           return (
-            <ListItem key={transcript.id}>
+            <ListItem key={transcript.id} onClick={() => getTranscript(transcript.id)}>
               {transcript.id}
             </ListItem>
           )
