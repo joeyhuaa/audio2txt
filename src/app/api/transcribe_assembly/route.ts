@@ -6,7 +6,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
     const { audioUrl } = await req.json()
     if (audioUrl) {
-      const client = new AssemblyAI({ apiKey: process.env.ASSEMBLY_AI_API_KEY })
+      const client = new AssemblyAI({ apiKey: process.env.ASSEMBLY_AI_API_KEY ?? '' })
 
       const params = {
         audio: audioUrl,
