@@ -13,8 +13,8 @@ export async function POST(req: Request): Promise<NextResponse> {
     const s3Client = new S3Client({ 
       region: 'us-west-1',
       credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID ?? '',
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY ?? ''
       }
     });
     const s3FileKey = `Vox Stems/${file?.name}`
