@@ -5,9 +5,9 @@ import { Upload } from "@aws-sdk/lib-storage";
 
 export async function POST(req: Request): Promise<NextResponse> {
   try {
-    const formdata = await req.formData()
+    const formdata: any = await req.formData()
     const file = formdata.get('audioFile')
-    const fileStream = file.stream();
+    const fileStream = file!.stream();
 
     // initialize s3 client
     const s3Client = new S3Client({ 

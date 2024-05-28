@@ -6,10 +6,10 @@ import Link from 'next/link'
 
 interface LeftSidebarProps {
   transcripts: any[];
-  setCurrTranscript: () => void;
+  setCurrTranscript: (transcript: { text: string }) => void;
 }
 
-const LeftSidebar = React.FC<LeftSidebarProps> = ({ transcripts, setCurrTranscript }) => {
+const LeftSidebar: React.FC<LeftSidebarProps> = ({ transcripts, setCurrTranscript }) => {
   console.log('transcripts',transcripts)
   //* controls which projects are shown on homepage -- solo projects or shared projects
   const [activeTab, setActiveTab] = useState(null)
@@ -30,7 +30,7 @@ const LeftSidebar = React.FC<LeftSidebarProps> = ({ transcripts, setCurrTranscri
       </div>
 
       <List>
-        {transcripts.map((transcript: object) => {
+        {transcripts.map((transcript: { id: string }) => {
           return (
             <ListItem key={transcript.id} onClick={() => getTranscript(transcript.id)}>
               {transcript.id}

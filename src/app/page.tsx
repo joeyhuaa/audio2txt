@@ -7,11 +7,11 @@ import Transcriber from "@/components/Transcriber";
 import LeftSidebar from "@/components/LeftSidebar";
 
 export default function Home() {
-  const [audioFile, setAudioFile] = useState<File | Blob | null>(null) //just Blob?
+  const [audioFile, setAudioFile] = useState<File | null>(null) //just Blob?
   const [s3FileKey, setS3FileKey] = useState<string | null>(null)
   const [downloadUri, setDownloadUri] = useState<string | null>(null)
   const [transcripts, setTranscripts] = useState<any[]>([])
-  const [currTranscript, setCurrTranscript] = useState<object | null>(null)
+  const [currTranscript, setCurrTranscript] = useState<{ text: string } | null>(null)
 
   //fetch all transcripts
   useEffect(() => {
@@ -48,7 +48,7 @@ export default function Home() {
 
   return (
     <Main>
-      <LeftSidebar transcripts={transcripts} setCurrTranscript={setCurrTranscript} />
+      <LeftSidebar transcripts={transcripts} setCurrTranscript={(transcript: { text: string }) => setCurrTranscript(transcript)} />
 
       <TranscriptView>
         <h1 style={{marginBottom:'20px'}}>View Transcript</h1>
@@ -56,7 +56,7 @@ export default function Home() {
       </TranscriptView>
 
       <RightSide>
-        <Uploader setAudio={(audio: { audioFile: File | Blob | null, s3FileKey: string | null }) => {
+        <Uploader setAudio={(audio: { audioFile: File | null, s3FileKey: string | null }) => {
           setAudioFile(audio.audioFile)
           setS3FileKey(audio.s3FileKey)
         }} />

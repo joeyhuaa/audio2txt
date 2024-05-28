@@ -3,13 +3,13 @@ import { useState, useEffect, useRef } from "react"
 import styled from "styled-components"
 
 interface UploaderProps {
-  setAudio: (audio: { audioFile: File | Blob | null, s3FileKey: string | null }) => void;
+  setAudio: (audio: { audioFile: File | null, s3FileKey: string | null }) => void;
 }
 
 //audio file uploads
 const Uploader: React.FC<UploaderProps> = ({ setAudio }) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [audioFile, setAudioFile] = useState<File | Blob | null>(null) //just Blob?
+  const [audioFile, setAudioFile] = useState<File | null>(null) //just Blob?
   const [s3FileKey, setS3FileKey] = useState<string | null>(null)
   const [isUploading, setIsUploading] = useState<boolean>(false)
   const [uploadProgress, setUploadProgress] = useState<number>(0)
@@ -17,7 +17,7 @@ const Uploader: React.FC<UploaderProps> = ({ setAudio }) => {
   // elevate.ai api
   useEffect(() => {
     async function uploadAudio() {
-      const formdata = new FormData()
+      const formdata: any = new FormData()
       formdata.append('audioFile', audioFile)
 
       const response = await fetch('/api/upload_audio_s3', {
