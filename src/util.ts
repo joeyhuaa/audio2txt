@@ -1,1 +1,1 @@
-export const requestHeaders: HeadersInit = new Headers();
+export const requestHeaders: Headers = new Headers();
