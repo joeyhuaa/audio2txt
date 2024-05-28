@@ -11,6 +11,7 @@ export default function Home() {
   const [s3FileKey, setS3FileKey] = useState<string | null>(null)
   const [downloadUri, setDownloadUri] = useState<string | null>(null)
   const [transcripts, setTranscripts] = useState<any[]>([])
+  const [currTranscript, setCurrTranscript] = useState<object | null>(null)
 
   //fetch all transcripts
   useEffect(() => {
@@ -47,14 +48,20 @@ export default function Home() {
 
   return (
     <Main>
-      <LeftSidebar transcripts={transcripts} />
-      <main className={styles.main}>
+      <LeftSidebar transcripts={transcripts} setCurrTranscript={setCurrTranscript} />
+
+      <TranscriptView>
+        <h1 style={{marginBottom:'20px'}}>View Transcript</h1>
+        {currTranscript && <TranscriptContent>{currTranscript.text}</TranscriptContent>}
+      </TranscriptView>
+
+      <RightSide>
         <Uploader setAudio={(audio: { audioFile: File | Blob | null, s3FileKey: string | null }) => {
           setAudioFile(audio.audioFile)
           setS3FileKey(audio.s3FileKey)
         }} />
         <Transcriber audioUrl={downloadUri} />
-      </main>
+      </RightSide>
     </Main>
   );
 }
@@ -62,4 +69,16 @@ export default function Home() {
 const Main = styled.div`
   display: flex;
   padding: 35px;
+`
+const TranscriptView = styled.div`
+  height: 80%;
+  padding-left: 35px;
+  width: 60%;
+`
+const TranscriptContent = styled.span`
+  // margin-top: 20px;
+`
+const RightSide = styled.div`
+  display: flex;
+  flex-direction: column;
 `

@@ -26,14 +26,14 @@ const Transcriber: React.FC<TranscriberProps> = ({ audioUrl }) => {
 
   return (
     <div>
-      <h1>Transcriber</h1>
-      {!audioUrl && <p>Upload an audio file to transcribe</p>}
+      {/* <h1>Transcriber</h1>
+      {!audioUrl && <p>Upload an audio file to transcribe</p>} */}
       {(audioUrl && !transcript) && (
         <p>Transcribing...</p>
       )}
-      {transcript && (
+      {/* {transcript && (
         <p>{transcript}</p>
-      )}
+      )} */}
     </div>
   )
 }

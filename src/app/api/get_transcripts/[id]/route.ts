@@ -2,8 +2,6 @@
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }): Promise<NextResponse> {
-  console.log('app/api/get_transcripts/[id]')
-
   try {
     const { id } = params
     //fetch 10 most recent transcripts

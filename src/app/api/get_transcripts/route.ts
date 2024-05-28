@@ -2,18 +2,17 @@
 import { NextResponse } from "next/server"
 
 export async function GET(): Promise<NextResponse> {
-  console.log('app/api/get_transcripts')
-
   try {
     let transcripts: any[] = []
 
     //fetch 10 most recent transcripts
     const response = await fetch('https://api.assemblyai.com/v2/transcript', {
       method: 'GET',
-      headers: { 'Authorization': process.env.ASSEMBLY_AI_API_KEY }
+      headers: { 'Authorization': process.env.ASSEMBLY_AI_API_KEY },
+      cache: 'no-store' //nextjs caches GET requests by default, opt out so we get fresh results every call
     })
     const data = await response.json()
-    // console.log('data',data)
+    console.log('data',data)
     transcripts = data.transcripts
     
     //keep fetching prev page of transcripts if prev_url is present 
@@ -21,7 +20,8 @@ export async function GET(): Promise<NextResponse> {
     while (prevUrl) {
       const response = await fetch(prevUrl, {
         method: 'GET',
-        headers: { 'Authorization': process.env.ASSEMBLY_AI_API_KEY }
+        headers: { 'Authorization': process.env.ASSEMBLY_AI_API_KEY },
+        cache: 'no-store'
       })
       const newData = await response.json()
       transcripts = [...transcripts, ...newData.transcripts]

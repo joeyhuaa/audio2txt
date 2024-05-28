@@ -3,8 +3,6 @@ import { NextRequest, NextResponse } from "next/server"
 import { AssemblyAI } from 'assemblyai'
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  console.log('app/api/transcribe_assembly')
-
   try {
     const { audioUrl } = await req.json()
     if (audioUrl) {

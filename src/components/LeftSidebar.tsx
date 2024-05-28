@@ -1,27 +1,32 @@
+'use client'
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 // import { useRouter } from 'next/router'
 
-export default function LeftSidebar({ transcripts }) {
+interface LeftSidebarProps {
+  transcripts: any[];
+  setCurrTranscript: () => void;
+}
+
+const LeftSidebar = React.FC<LeftSidebarProps> = ({ transcripts, setCurrTranscript }) => {
   console.log('transcripts',transcripts)
   //* controls which projects are shown on homepage -- solo projects or shared projects
   const [activeTab, setActiveTab] = useState(null)
   // const router = useRouter();
 
-  async function getTranscript(id) {
-    console.log('getTranscript')
+  async function getTranscript(id: string) {
     const response = await fetch(`/api/get_transcripts/${id}`)
     const data = await response.json()
-    console.log(data)
 
-    //todo - pass transcript back up to parent 
+    //pass transcript back up to parent 
+    setCurrTranscript(data)
   }
 
   return (
     <SidebarWrapper id='leftsidebar'>
       <div id='top'>
-        <Title>View Transcripts</Title>
+        <Title>Your Transcripts ({transcripts.length})</Title>
       </div>
 
       <List>
@@ -43,13 +48,16 @@ export default function LeftSidebar({ transcripts }) {
   )
 }
 
+export default LeftSidebar
+
 const SidebarWrapper = styled.section`
-  // background-color: ${props => props.theme.color1};
   border-right: #292928 1px solid;
   padding-right: 35px;
+  overflow: auto;
+  height: 80%;
 `;
 const Title = styled.h1`
-  font-size: 25px;
+  // font-size: 25px;
   text-shadow: 0px 0px 3px whitesmoke;
   margin-bottom: 25px;
 `;
@@ -63,20 +71,3 @@ const ListItem = styled.span`
   padding-bottom: 10px;
   padding-top: 10px;
 `
-
-// const Tab = styled.div`
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   margin-right: 5px;
-//   border-top-left-radius: 50px;
-//   border-bottom-left-radius: 50px;
-//   border-top-right-radius: 50px;
-//   border-bottom-right-radius: 50px;
-//   border: solid whitesmoke;
-//   height: 40px;
-//   width: 130px;
-//   font-size: 10pt;
-//   background-color: ${props => props.selected ? 'whitesmoke' : 'black'};
-//   color: ${props => props.selected ? 'black' : 'whitesmoke'};
-// `;
