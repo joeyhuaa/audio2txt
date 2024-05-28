@@ -1,6 +1,6 @@
 // app/api/upload_audio_s3
 import { NextRequest, NextResponse } from "next/server"
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
+import { S3Client } from "@aws-sdk/client-s3"
 import { Upload } from "@aws-sdk/lib-storage";
 
 export async function POST(req: Request): Promise<NextResponse> {

@@ -1,14 +1,16 @@
 // app/api/get_transcripts
 import { NextResponse } from "next/server"
+import { requestHeaders } from "@/util";
 
 export async function GET(): Promise<NextResponse> {
   try {
     let transcripts: any[] = []
+    requestHeaders.set('Authorization', process.env.ASSEMBLY_AI_API_KEY)
 
     //fetch 10 most recent transcripts
     const response = await fetch('https://api.assemblyai.com/v2/transcript', {
       method: 'GET',
-      headers: { 'Authorization': process.env.ASSEMBLY_AI_API_KEY },
+      headers: requestHeaders,
       cache: 'no-store' //nextjs caches GET requests by default, opt out so we get fresh results every call
     })
     const data = await response.json()
@@ -20,7 +22,7 @@ export async function GET(): Promise<NextResponse> {
     while (prevUrl) {
       const response = await fetch(prevUrl, {
         method: 'GET',
-        headers: { 'Authorization': process.env.ASSEMBLY_AI_API_KEY },
+        headers: requestHeaders,
         cache: 'no-store'
       })
       const newData = await response.json()
